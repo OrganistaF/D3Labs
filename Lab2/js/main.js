@@ -1,35 +1,16 @@
-/*
-*    main.js
-*/
+var data = [25, 20, 15, 10, 5];
+var svg = d3.select("#chart-area")
+            .append("svg")
+            .attr("width", 400)
+            .attr("height", 400);
 
-var svg = d3.select("#chart-area").append("svg")
-
-	.attr("width", 400)
-
-	.attr("height", 400);
-
-// Add a circle to the svg with center at (100, 250) and a radius of 70 or color blue.
-
-var circle = svg.append("circle")
-
-	.attr("cx", 100)
-
-	.attr("cy", 250)
-
-	.attr("r", 70)
-
-	.attr("fill", "blue");
-
-// Add a rectangle with upper left corner at (20, 20) of width 20 and height 30 or color red.
-
-var rect = svg.append("rect")
-
-	.attr("x", 20)
-
-	.attr("y", 20)
-
-	.attr("width", 20)
-
-	.attr("height", 20)
-
-	.attr("fill","red");
+// Bind data
+svg.selectAll("rect")
+   .data(data)
+   .enter()
+   .append("rect")
+   .attr("width", 40)                   
+   .attr("height", function(d) { return d; })
+   .attr("x", function(d, i) { return i * 45; })
+   .attr("y", function(d) { return 400 - d; })
+   .attr("fill", "red");

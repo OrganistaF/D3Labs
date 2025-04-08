@@ -1,35 +1,40 @@
-/*
-*    main.js
-*/
+// d3.csv("data/ages.csv").then((data)=> {
+// 	console.log(data);
+// });
 
-var svg = d3.select("#chart-area").append("svg")
+// d3.tsv("data/ages.tsv").then((data)=> {
+// 	console.log(data);
+// });
 
-	.attr("width", 400)
+// d3.json("data/ages.json").then((data)=> {
+// 	console.log(data);
+// });
 
-	.attr("height", 400);
+d3.json("data/ages.json")
+  .then(data => {
+    data.forEach(d => {
+      d.age = +d.age;
+    });
+    console.log(data);
 
-// Add a circle to the svg with center at (100, 250) and a radius of 70 or color blue.
+    const svgWidth = 800;
+    const svgHeight = 600;
+    const svg = d3.select("#chart-area")
+                  .append("svg")
+                  .attr("width", svgWidth)
+                  .attr("height", svgHeight);
 
-var circle = svg.append("circle")
+    svg.selectAll("circle")
+       .data(data)
+       .enter()
+       .append("circle")
+       .attr("cx", (d, i) => 20 + i * 80)
+       .attr("cy", svgHeight / 4)
+       .attr("r", d => d.age* 2)
+       .attr("fill", d => d.age > 10 ? "orange" : "purple");
+  })
+  .catch(error => {
+    console.error("Error loading data: ", error);
+  });
 
-	.attr("cx", 100)
 
-	.attr("cy", 250)
-
-	.attr("r", 70)
-
-	.attr("fill", "blue");
-
-// Add a rectangle with upper left corner at (20, 20) of width 20 and height 30 or color red.
-
-var rect = svg.append("rect")
-
-	.attr("x", 20)
-
-	.attr("y", 20)
-
-	.attr("width", 20)
-
-	.attr("height", 20)
-
-	.attr("fill","red");
