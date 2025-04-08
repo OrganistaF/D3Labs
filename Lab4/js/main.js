@@ -1,35 +1,45 @@
-/*
-*    main.js
-*/
+d3.json("data/buildings.json")
+  .then(data => {
+    data.forEach(d => {
+      d.height = +d.height;
+    });
+    console.log(data);
+	
+	const svgWidth = 500;
+    const svgHeight = 500;
+    const svg = d3.select("#chart-area")
+                  .append("svg")
+                  .attr("width", svgWidth)
+                  .attr("height", svgHeight);
 
-var svg = d3.select("#chart-area").append("svg")
+    const chartWidth = 400;
+    const chartHeight = 400;
+    const margin = { top: 50, left: 50 };
 
-	.attr("width", 400)
+    const x = d3.scaleBand()
+                .domain(data.map(d => d.name))
+                .range([0, chartWidth])
+                .paddingInner(0.3)
+                .paddingOuter(0.3);
 
-	.attr("height", 400);
+    const y = d3.scaleLinear()
+                .domain([0, 828])
+                .range([chartHeight, 0]);
 
-// Add a circle to the svg with center at (100, 250) and a radius of 70 or color blue.
+    const color = d3.scaleOrdinal()
+                    .domain(data.map(d => d.name))
+                    .range(d3.schemeSet3);
 
-var circle = svg.append("circle")
-
-	.attr("cx", 100)
-
-	.attr("cy", 250)
-
-	.attr("r", 70)
-
-	.attr("fill", "blue");
-
-// Add a rectangle with upper left corner at (20, 20) of width 20 and height 30 or color red.
-
-var rect = svg.append("rect")
-
-	.attr("x", 20)
-
-	.attr("y", 20)
-
-	.attr("width", 20)
-
-	.attr("height", 20)
-
-	.attr("fill","red");
+    svg.selectAll("rect")
+    	.data(data)
+		.enter()
+    	.append("rect")
+    	.attr("x", d => margin.left + x(d.name))
+        .attr("y", d => margin.top + y(d.height))
+        .attr("width", x.bandwidth())
+        .attr("height", d => chartHeight - y(d.height))
+        .attr("fill", d => color(d.name));
+  })
+  .catch(error => {
+    console.error("Error loading buildings data: ", error);
+  });
