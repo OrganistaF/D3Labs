@@ -1,0 +1,8 @@
+svg {
+	margin: 20px;
+}
+#logo {
+	max-width: 80px; /* Adjust this value as needed */
+	height: auto;
+	display: inline-block;
+  }
